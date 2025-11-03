@@ -2,8 +2,8 @@
 <html lang="th">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Interactive Letter — GitHub Pages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Letter Generator</title>
   <style>
     @font-face {
       font-family: 'GeorgiaProCondensedLocal';
@@ -14,104 +14,133 @@
       font-display: swap;
     }
 
-    :root{
-      --canvas-width: 1024px;
-      --canvas-height: 1024px;
+    body {
+      margin: 0;
+      background: #111;
+      color: #fff;
+      font-family: system-ui, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      gap: 20px;
     }
 
-    body{font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; margin:20px; background:#111; color:#eee}
-    .wrap{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 360px;gap:20px}
-
-    .stage{background:#222;padding:24px;border-radius:8px;display:flex;align-items:center;justify-content:center}
     #letter {
       position: relative;
-      width: var(--canvas-width);
-      height: var(--canvas-height);
-      background: #fff url('./ssuks.jpg') center/cover no-repeat;
-      box-shadow: 0 8px 30px rgba(0,0,0,.7);
+      width: 768px;
+      height: 768px;
+      background: url('ssuks.jpg') center/contain no-repeat;
+      background-color: #fff;
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
       overflow: hidden;
-      transform-origin: top left;
+      border-radius: 8px;
     }
 
-    #nameLayer{
+    /* ชื่อที่จะต่อท้าย Dear */
+    #nameLayer {
       position: absolute;
-      top: 162px; /* ปรับให้อยู่ระดับเดียวกับ Dear. */
-      left: 225px; /* อยู่ถัดจาก Dear. */
-      pointer-events: none;
-      white-space: nowrap;
-      overflow: visible;
-    }
-
-    #nameText{
+      top: 155px;   /* ปรับตรงกับตำแหน่ง Dear */
+      left: 245px;  /* ถัดจาก Dear พอดี */
       font-family: 'GeorgiaProCondensedLocal', Georgia, 'Times New Roman', serif;
-      font-size: 46px; /* ปรับให้ขนาดเท่ากับ Dear. ในภาพ */
-      line-height: 1;
-      color:#111;
-      text-shadow: none;
+      font-size: 46px;
+      color: #111;
+      white-space: nowrap;
+      pointer-events: none;
     }
 
-    .controls{background:#1a1a1a;padding:18px;border-radius:8px}
-    .controls h2{margin:0 0 12px 0;font-size:18px}
-    .controls label{display:block;margin:10px 0 6px;color:#ddd;font-size:13px}
-    .controls input[type=text]{width:100%;padding:8px;border-radius:6px;border:1px solid #333;background:#0f0f0f;color:#fff}
-    .controls button{margin-top:12px;padding:10px 12px;border-radius:8px;border:none;background:#2563eb;color:white;cursor:pointer}
-    .small{font-size:12px;color:#999;margin-top:8px}
+    /* กล่องควบคุม */
+    .controls {
+      background: #1e1e1e;
+      padding: 20px;
+      border-radius: 10px;
+      width: 320px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    }
 
-    footer{grid-column:1/-1;margin-top:12px;color:#bbb;text-align:center}
+    label {
+      font-size: 14px;
+      margin-bottom: 8px;
+      display: block;
+    }
 
-    @media(max-width:900px){.wrap{grid-template-columns:1fr} .controls{order:2}}
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: none;
+      background: #333;
+      color: #fff;
+      margin-bottom: 15px;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      background: #2563eb;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+
+    footer {
+      font-size: 12px;
+      color: #999;
+      margin-top: 10px;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="stage">
-      <div id="letter">
-        <div id="nameLayer">
-          <div id="nameText">ชื่อของคุณ</div>
-        </div>
-      </div>
-    </div>
-
-    <aside class="controls">
-      <h2>เพิ่มชื่อบนจดหมาย</h2>
-      <label for="nameInput">ชื่อที่จะให้แสดงถัดจาก Dear.</label>
-      <input id="nameInput" type="text" placeholder="พิมพ์ชื่อของคุณ เช่น SUTSAWAN" />
-      <button id="downloadBtn">ดาวน์โหลดเป็นรูป (PNG)</button>
-      <div class="small">ชื่อจะปรากฏถัดจากคำว่า "Dear." ในภาพ โดยมีขนาดฟอนต์เท่ากัน</div>
-    </aside>
-
-    <footer>นำไฟล์ทั้งหมดขึ้น GitHub แล้วเปิดผ่าน GitHub Pages เพื่อใช้งาน</footer>
+  <div id="letter">
+    <div id="nameLayer">ชื่อของคุณ</div>
   </div>
+
+  <div class="controls">
+    <label for="nameInput">พิมพ์ชื่อของคุณ (จะต่อท้ายคำว่า Dear.):</label>
+    <input id="nameInput" type="text" placeholder="เช่น SUTSAWAN" />
+    <button id="downloadBtn">ดาวน์โหลดจดหมายเป็นภาพ (PNG)</button>
+  </div>
+
+  <footer>© 2025 Sibsipasirisart University — Letter Generator</footer>
 
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <script>
     const nameInput = document.getElementById('nameInput');
-    const nameText = document.getElementById('nameText');
-    const downloadBtn = document.getElementById('downloadBtn');
+    const nameLayer = document.getElementById('nameLayer');
     const letter = document.getElementById('letter');
+    const downloadBtn = document.getElementById('downloadBtn');
 
     nameInput.addEventListener('input', () => {
-      nameText.textContent = nameInput.value.trim() ? nameInput.value : '';
+      const val = nameInput.value.trim();
+      nameLayer.textContent = val ? val : 'ชื่อของคุณ';
     });
 
-    downloadBtn.addEventListener('click', async ()=>{
+    downloadBtn.addEventListener('click', async () => {
       downloadBtn.disabled = true;
-      downloadBtn.textContent = 'กำลังสร้างรูป...';
-      try{
-        const canvas = await html2canvas(letter, {scale:2, useCORS:true});
-        const dataUrl = canvas.toDataURL('image/png');
+      downloadBtn.textContent = 'กำลังสร้าง...';
+      try {
+        const canvas = await html2canvas(letter, { scale: 2, useCORS: true });
+        const dataURL = canvas.toDataURL('image/png');
         const a = document.createElement('a');
-        a.href = dataUrl;
-        a.download = (nameInput.value ? nameInput.value.replace(/\s+/g,'_') : 'letter') + '.png';
-        document.body.appendChild(a);
+        a.href = dataURL;
+        a.download = 'letter.png';
         a.click();
-        a.remove();
-      }catch(err){
-        console.error(err);
-        alert('เกิดข้อผิดพลาดในการสร้างภาพ');
-      }finally{
+      } catch (e) {
+        alert('เกิดข้อผิดพลาด ลองใหม่อีกครั้ง');
+        console.error(e);
+      } finally {
         downloadBtn.disabled = false;
-        downloadBtn.textContent = 'ดาวน์โหลดเป็นรูป (PNG)';
+        downloadBtn.textContent = 'ดาวน์โหลดจดหมายเป็นภาพ (PNG)';
       }
     });
   </script>
